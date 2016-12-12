@@ -28,7 +28,7 @@ CLOBBER.include(FileList["*.d"])
 task :default => [:rlib, TARGET_MAP]
 
 file TARGET_BIN => OBJS do |t|
-  sh "#{LINKER} #{LDFLAGS} #{t.prerequisites.join(' ')} ../rlib/target/i586-unknown-linux-gnu/debug/libtestlib.a  #{LOADLIBES} -o #{t.name} "
+  sh "#{LINKER} #{LDFLAGS} #{t.prerequisites.join(' ')} ../rlib/target/i586-unknown-linux-gnu/release/libtestlib.a  #{LOADLIBES} -o #{t.name} "
 end
 
 rule '.o' => [proc{|t| t.pathmap("../src/%n.c") }] do |t|
@@ -37,7 +37,7 @@ end
 
 task :rlib do
   cd '../rlib/' do
-    sh "cargo build --target=i586-unknown-linux-gnu"
+    sh "cargo build --target=i586-unknown-linux-gnu --release"
   end
 end
 
