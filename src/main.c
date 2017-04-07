@@ -33,7 +33,7 @@ EXPORT W MAIN(MESSAGE *msg)
 {
 	printf("test: %d\n", plus_one(2));
 	printf("test: %d\n", minus_one(2));
-	printf("test: %d\n", sample_call(2));
+	printf("test: %08x\n", sample_call(2));
 
 	return 0;
 }
