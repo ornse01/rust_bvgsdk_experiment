@@ -1,5 +1,1 @@
-pcat/Dependencies.mf
-pcat/*.o
-pcat/*.map
-pcat/*.out
-rlib/target/
+/target
