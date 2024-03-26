@@ -1,7 +1,0 @@
-[package]
-name = "testlib"
-version = "0.0.1"
-authors = ["ornse01 <ornse01@users.osdn.me>"]
-
-[lib]
-crate-type = ["staticlib"]

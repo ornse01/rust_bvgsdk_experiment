@@ -1,0 +1,53 @@
+{
+    "abi-return-struct-as-int": true,
+    "allows-weak-linkage": false,
+    "arch": "x86",
+    "cpu": "i586",
+    "data-layout": "e-e:m-p:32:32:32",
+    "disable-redzone": true,
+    "emit-debug-gdb-scripts": false,
+    "exe-suffix": ".out",
+    "executables": true,
+    "features": "",
+    "is-builtin": false,
+    "is-like-msvc": false,
+    "is-like-windows": false,
+    "linker": "/usr/local/brightv/tool/gnu/i386-unknown-gnu/bin/gcc386",
+    "linker-flavor": "ld",
+    "linker-is-gnu": true,
+    "llvm-target": "i386-elf",
+    "max-atomic-width": 64,
+    "os": "none",
+    "panic-strategy": "abort",
+    "pre-link-args": {
+        "ld": [
+            "-L/usr/local/brightv/lib/i386e2"
+        ]
+    },
+    "late-link-args": {
+        "ld": [
+            "-limg",
+            "-lapp",
+            "-ltf",
+            "-lgcc",
+            "-lmain_r",
+            "-ldbg",
+            "-llang",
+            "-lg",
+            "-lsys",
+            "-lg",
+            "-lf",
+            "-lsvc"
+        ]
+    },
+    "post-link-args": {
+        "ld": [
+        ]
+    },
+    "singlethread": true,
+    "split-debuginfo": "off",
+    "stack-probes": {
+        "kind": "call"
+    },
+    "target-pointer-width": "32"
+}
