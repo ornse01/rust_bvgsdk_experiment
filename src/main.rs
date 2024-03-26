@@ -18,6 +18,7 @@ fn panic(_info: &PanicInfo) -> ! {
 
 extern "C" {
     fn b_chg_pri(id: i32, pri: i32, opt: i32) -> i32;
+    fn printf(format: *const c_char, value: i32) -> i32;
 
     fn malloc(size: c_size_t) -> *mut u8;
     fn free(p: *mut u8);
@@ -54,8 +55,10 @@ fn sample_call(_value: i32) -> i32 {
 }
 
 fn print(format: &str, value: i32) {
+    let c_string = CString::new(format).expect("CString::new failed");
+    let ptr = c_string.as_ptr();
     unsafe {
-        printf(format.as_ptr(), value);
+        printf(ptr, value);
     }
 }
 
