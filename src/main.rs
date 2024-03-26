@@ -35,8 +35,19 @@ fn print(format: &str, value: i32) {
     }
 }
 
+#[repr(C)]
+pub struct MESSAGE {
+    msg_type: i32,
+    msg_size: i32,
+}
+
 #[no_mangle]
-pub extern "C" fn MAIN() -> i32 {
+pub extern "C" fn MAIN(target: *mut MESSAGE) -> i32 {
+    unsafe {
+        print("msg_type: %d\n", (*target).msg_type);
+        print("msg_size: %d\n", (*target).msg_size);
+    }
+
 	print("test: %d\n", plus_one(2));
 	print("test: %d\n", minus_one(2));
 	print("test: %08x\n", sample_call(2));
