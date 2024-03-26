@@ -1,15 +1,15 @@
 #![no_std]
 #![no_main]
 
-use core::str;
 use core::panic::PanicInfo;
+use core::str;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-extern {
+extern "C" {
     fn b_chg_pri(id: i32, pri: i32, opt: i32) -> i32;
     fn printf(format: *const u8, value: i32) -> i32;
 }
@@ -48,9 +48,9 @@ pub extern "C" fn MAIN(target: *mut MESSAGE) -> i32 {
         print("msg_size: %d\n", (*target).msg_size);
     }
 
-	print("test: %d\n", plus_one(2));
-	print("test: %d\n", minus_one(2));
-	print("test: %08x\n", sample_call(2));
+    print("test: %d\n", plus_one(2));
+    print("test: %d\n", minus_one(2));
+    print("test: %08x\n", sample_call(2));
 
     return 0;
 }
