@@ -1,8 +1,15 @@
 #![no_std]
 #![no_main]
+#![feature(c_size_t)]
 
+extern crate alloc;
+
+use core::alloc::{GlobalAlloc, Layout};
+use core::ffi::{c_char, c_size_t};
 use core::panic::PanicInfo;
 use core::str;
+
+use alloc::ffi::CString;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -11,7 +18,24 @@ fn panic(_info: &PanicInfo) -> ! {
 
 extern "C" {
     fn b_chg_pri(id: i32, pri: i32, opt: i32) -> i32;
-    fn printf(format: *const u8, value: i32) -> i32;
+
+    fn malloc(size: c_size_t) -> *mut u8;
+    fn free(p: *mut u8);
+}
+
+struct BTRONAllocator {}
+
+#[global_allocator]
+static ALLOCATOR: BTRONAllocator = BTRONAllocator {};
+
+unsafe impl GlobalAlloc for BTRONAllocator {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+        malloc(layout.size())
+    }
+
+    unsafe fn dealloc(&self, ptr: *mut u8, _: Layout) {
+        free(ptr)
+    }
 }
 
 fn plus_one(x: i32) -> i32 {
