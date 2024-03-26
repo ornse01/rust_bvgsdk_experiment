@@ -44,7 +44,7 @@
         "ld": [
         ]
     },
-    "singlethread": false,
+    "singlethread": true,
     "split-debuginfo": "off",
     "stack-probes": {
         "kind": "call"
