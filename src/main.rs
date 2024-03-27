@@ -179,7 +179,7 @@ impl WEVENT {
         self.src as UW
     }
     fn s_time(&self) -> UW {
-        ((self.data[1] as UW) << 16) | self.data[0] as UW
+        ((self.data[1] as UW) << 16) | ((self.data[0] as UW) & 0xffff)
     }
 }
 
