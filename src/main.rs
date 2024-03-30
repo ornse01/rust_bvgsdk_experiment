@@ -4,8 +4,7 @@
 
 extern crate alloc;
 
-use core::alloc::{GlobalAlloc, Layout};
-use core::ffi::{c_char, c_size_t};
+use core::ffi::c_char;
 use core::panic::PanicInfo;
 use core::str;
 
@@ -13,14 +12,12 @@ use alloc::ffi::CString;
 
 mod btron;
 
+use btron::allocator::Allocator;
 use btron::rustify::*;
 use btron::types::*;
 
 extern "C" {
     fn printf(format: *const c_char, value: i32) -> i32;
-
-    fn malloc(size: c_size_t) -> *mut u8;
-    fn free(p: *mut u8);
 }
 
 #[panic_handler]
@@ -40,20 +37,8 @@ const TK_e: TC = TK_a + 4;
 const TK_s: TC = TK_a + 18;
 const TK_t: TC = TK_a + 19;
 
-struct BTRONAllocator {}
-
 #[global_allocator]
-static ALLOCATOR: BTRONAllocator = BTRONAllocator {};
-
-unsafe impl GlobalAlloc for BTRONAllocator {
-    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        malloc(layout.size())
-    }
-
-    unsafe fn dealloc(&self, ptr: *mut u8, _: Layout) {
-        free(ptr)
-    }
-}
+static ALLOCATOR: Allocator = Allocator {};
 
 fn plus_one(x: i32) -> i32 {
     x + 1
