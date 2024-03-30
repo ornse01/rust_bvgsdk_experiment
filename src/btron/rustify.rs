@@ -1,4 +1,5 @@
-use brightv_api::*;
+use super::brightv::*;
+use super::types::*;
 
 impl RECT {
     pub fn lefttop(&self) -> PNT {
@@ -21,6 +22,16 @@ impl WEVENT {
     }
     pub fn s_time(&self) -> UW {
         ((self.data[1] as UW) << 16) | ((self.data[0] as UW) & 0xffff)
+    }
+}
+
+pub fn chg_pri(id: i32, pri: i32, opt: i32) -> Result<W, ERR> {
+    let ret: i32;
+    unsafe { ret = b_chg_pri(id, pri, opt) }
+    if ret >= 0 {
+        Ok(ret)
+    } else {
+        Err(ret)
     }
 }
 

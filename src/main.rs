@@ -11,11 +11,10 @@ use core::str;
 
 use alloc::ffi::CString;
 
-use brightv_api::*;
-use btron_api_wrapper::*;
+mod btron;
 
-mod brightv_api;
-mod btron_api_wrapper;
+use btron::rustify::*;
+use btron::types::*;
 
 extern "C" {
     fn printf(format: *const c_char, value: i32) -> i32;
