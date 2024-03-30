@@ -39,12 +39,16 @@ fn panic(info: &PanicInfo) -> ! {
 #[global_allocator]
 static ALLOCATOR: Allocator = Allocator {};
 
-fn print(format: &str, value: i32) {
-    let c_string = CString::new(format).expect("CString::new failed");
-    let ptr = c_string.as_ptr();
-    unsafe {
-        printf(ptr, value);
-    }
+fn plus_one(x: i32) -> i32 {
+    x + 1
+}
+
+fn minus_one(x: i32) -> i32 {
+    x - 1
+}
+
+fn sample_call(_value: i32) -> i32 {
+    return chg_pri(0, 0, 0).unwrap_err();
 }
 
 #[repr(C)]
@@ -53,150 +57,16 @@ pub struct MESSAGE {
     msg_size: i32,
 }
 
-fn killme(wid: WID) {
-    let _ = gset_ptr(Some(StdPointerShape::PS_BUSY), None, None, None);
-    let _ = wcls_wnd(wid, WClsWndOpt::CLR);
-    ext_prc(0);
-}
-
-fn redisp(wid: WID) {
-    loop {
-        let result = wsta_dsp(wid, None, None).unwrap();
-        if result == 0 {
-            break;
-        }
-        let _ = wera_wnd(wid, None);
-
-        let result = wend_dsp(wid).unwrap();
-        match result {
-            true => continue,
-            false => break,
-        }
-    }
-}
-
-fn butdn(wid: WID, wev: &mut WEVENT) {
-    match wev.cmd as W {
-        W_PICT => {
-            let result = wchk_dck(wev.s_time()).unwrap();
-            match result {
-                PD::W_DCLICK => {
-                    killme(wid);
-                }
-                PD::W_PRESS => {
-                    let result = wmov_drg(wev, None).unwrap();
-                    if result {
-                        redisp(wid)
-                    }
-                }
-                _ => {}
-            }
-        }
-        W_FRAM => {
-            let result = wmov_drg(wev, None).unwrap();
-            if result {
-                redisp(wid)
-            }
-        }
-        W_TITL => {
-            let result = wmov_drg(wev, None).unwrap();
-            if result {
-                redisp(wid)
-            }
-        }
-        _ => {}
-    }
-}
-
-fn initialize(rect: &mut RECT, title: &[TC]) -> Result<WID, ERR> {
-    dopn_dat(None)?;
-
-    let wid = wopn_wnd(0, 0, rect, None, 2, title, None, None)?;
-
-    Ok(wid)
-}
-
-fn event_loop(wid: WID) {
-    let mut wev = WEVENT {
-        r#type: 0,
-        data: [0, 0, 0, 0],
-        cmd: 0,
-        wid: 0,
-        src: 0,
-    };
-
-    let _ = wreq_dsp(Some(wid));
-
-    loop {
-        let _ = wget_evt(&mut wev, WAIT);
-        match wev.r#type {
-            EV_NULL => {
-                if wev.wid as WID != wid {
-                    continue;
-                }
-                if wev.cmd as W != W_WORK {
-                    continue;
-                }
-                if wev.s_stat() & ES_CMD != 0 {
-                    continue;
-                }
-                let _ = gset_ptr(Some(StdPointerShape::PS_SELECT), None, None, None);
-            }
-            EV_REQUEST => match wev.cmd as W {
-                W_REDISP => redisp(wid),
-                W_PASTE => {
-                    let _ = wrsp_evt(&mut wev, true);
-                }
-                W_DELETE => {
-                    let _ = wrsp_evt(&mut wev, false);
-                    killme(wid);
-                }
-                W_FINISH => {
-                    let _ = wrsp_evt(&mut wev, false);
-                    killme(wid);
-                }
-                _ => {}
-            },
-            EV_RSWITCH => {
-                redisp(wid);
-            }
-            EV_SWITCH => {
-                butdn(wid, &mut wev);
-            }
-            EV_BUTDWN => {
-                butdn(wid, &mut wev);
-            }
-            EV_INACT => {
-                // do nothing
-            }
-            EV_DEVICE => {
-                //oprc_dev(&wev0.e, NULL, 0);
-            }
-            EV_MSG => {
-                let _ = clr_msg(MM_ALL, MM_ALL);
-            }
-            _ => {}
-        }
-    }
-}
-
 #[no_mangle]
-pub extern "C" fn MAIN(_: *mut MESSAGE) -> i32 {
-    let mut r0 = RECT {
-        left: 100,
-        top: 100,
-        right: 300 + 7,
-        bottom: 200 + 30,
-    };
-    let tit0: [TC; 5] = [TK_T, TK_e, TK_s, TK_t, TNULL];
-
-    let result = initialize(&mut r0, &tit0);
-    match result {
-        Ok(wid) => event_loop(wid),
-        Err(_) => {
-            ext_prc(0);
-        }
+pub extern "C" fn MAIN(target: *mut MESSAGE) -> i32 {
+    unsafe {
+        print!("msg_type: {}\n", (*target).msg_type);
+        print!("msg_size: {}\n", (*target).msg_size);
     }
+
+    println!("test: {}", plus_one(2));
+    println!("test: {}", minus_one(2));
+    println!("test: {}", sample_call(2));
 
     return 0;
 }
