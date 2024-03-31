@@ -49,10 +49,7 @@ fn minus_one(x: i32) -> i32 {
 }
 
 fn sample_call(_value: i32) -> i32 {
-    unsafe {
-        let err = b_chg_pri(0, 0, 0);
-        err
-    }
+    return chg_pri(0, 0, 0).unwrap_err();
 }
 
 fn print(format: &str, value: i32) {
