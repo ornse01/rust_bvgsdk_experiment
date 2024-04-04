@@ -13,12 +13,9 @@ use alloc::ffi::CString;
 mod btron;
 
 use btron::allocator::Allocator;
+use btron::print::*;
 use btron::rustify::*;
 use btron::types::*;
-
-extern "C" {
-    fn printf(format: *const c_char, value: i32) -> i32;
-}
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -52,14 +49,6 @@ fn sample_call(_value: i32) -> i32 {
     return chg_pri(0, 0, 0).unwrap_err();
 }
 
-fn print(format: &str, value: i32) {
-    let c_string = CString::new(format).expect("CString::new failed");
-    let ptr = c_string.as_ptr();
-    unsafe {
-        printf(ptr, value);
-    }
-}
-
 #[repr(C)]
 pub struct MESSAGE {
     msg_type: i32,
@@ -69,13 +58,13 @@ pub struct MESSAGE {
 #[no_mangle]
 pub extern "C" fn MAIN(target: *mut MESSAGE) -> i32 {
     unsafe {
-        print("msg_type: %d\n", (*target).msg_type);
-        print("msg_size: %d\n", (*target).msg_size);
+        print!("msg_type: {}\n", (*target).msg_type);
+        print!("msg_size: {}\n", (*target).msg_size);
     }
 
-    print("test: %d\n", plus_one(2));
-    print("test: %d\n", minus_one(2));
-    print("test: %08x\n", sample_call(2));
+    println!("test: {}", plus_one(2));
+    println!("test: {}", minus_one(2));
+    println!("test: {}", sample_call(2));
 
     return 0;
 }
