@@ -1,16 +1,23 @@
 extern crate alloc;
 
-use super::brightv::*;
+use super::{console::*, types::*};
 use core::fmt::{self, Error, Write};
 
 struct Writer;
 
 impl Write for Writer {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        let result;
-        let c_string = alloc::ffi::CString::new(s).unwrap();
-        let ptr = c_string.as_ptr();
-        unsafe { result = _PutString(ptr) }
+        let mut result;
+        let mut conf: [UW; 4] = [0, 0, 0, 0];
+        unsafe {
+            result = cons_conf(CS_GETPORT, conf.as_mut_ptr());
+        }
+        if result < 0 {
+            return Err(Error);
+        }
+        unsafe {
+            result = console_out(conf[0] as W, s.as_ptr() as *const B, s.len() as UW);
+        }
         if result >= 0 {
             Ok(())
         } else {
