@@ -2,7 +2,7 @@ use super::types::*;
 
 extern "C" {
     pub fn b_chg_pri(id: i32, pri: i32, opt: i32) -> i32;
-    pub fn b_ext_prc(code: W);
+    pub fn b_ext_prc(code: W) -> !;
     pub fn b_clr_msg(t_mask: W, last_mask: W) -> ERR;
     pub fn b_pdsp_msg(msg: *const TC) -> W;
     pub fn b_dopn_dat(lnk: *const LINK) -> W;

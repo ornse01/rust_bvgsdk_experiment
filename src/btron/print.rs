@@ -28,7 +28,7 @@ impl Write for Writer {
 
 pub fn _print(args: core::fmt::Arguments) {
     let mut writer = Writer {};
-    writer.write_fmt(args).unwrap();
+    let _ = writer.write_fmt(args);
 }
 
 #[macro_export]

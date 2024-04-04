@@ -1,25 +1,40 @@
 #![no_std]
 #![no_main]
 #![feature(c_size_t)]
+#![feature(panic_info_message)]
 
 extern crate alloc;
 
-use core::ffi::c_char;
 use core::panic::PanicInfo;
-use core::str;
-
-use alloc::ffi::CString;
 
 mod btron;
 
+use alloc::string::ToString;
 use btron::allocator::Allocator;
 use btron::print::*;
 use btron::rustify::*;
 use btron::types::*;
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
+fn panic(info: &PanicInfo) -> ! {
+    match info.message() {
+        Some(v) => {
+            println!("{}", &v.to_string());
+        }
+        None => {
+            println!("panic");
+        }
+    }
+    match info.location() {
+        Some(v) => println!(
+            "file: {}, line: {}, column: {}",
+            v.file(),
+            v.line(),
+            v.column(),
+        ),
+        None => println!("no location info"),
+    }
+    ext_prc(0)
 }
 
 const TK_A: TC = 0x2341;
