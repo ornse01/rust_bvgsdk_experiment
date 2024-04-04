@@ -1,3 +1,5 @@
+use core::ffi::{c_char, c_int};
+
 use super::types::*;
 
 extern "C" {
@@ -26,4 +28,6 @@ extern "C" {
     pub fn b_wget_evt(evt: *mut WEVENT, mode: W) -> W;
     pub fn b_wreq_dsp(wid: W) -> ERR;
     pub fn b_wrsp_evt(evt: *mut WEVENT, nak: W) -> ERR;
+
+    pub fn _PutString(s: *const c_char) -> c_int;
 }
