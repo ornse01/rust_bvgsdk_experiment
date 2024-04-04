@@ -35,3 +35,9 @@ pub fn _print(args: core::fmt::Arguments) {
 macro_rules! print {
     ($($arg:tt)*) => (_print(format_args!($($arg)*)));
 }
+
+#[macro_export]
+macro_rules! println {
+    ($fmt:expr) => (print!(concat!($fmt, "\n")));
+    ($fmt:expr, $($arg:tt)*) => (print!(concat!($fmt, "\n"), $($arg)*));
+}
