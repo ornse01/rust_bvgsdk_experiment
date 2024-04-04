@@ -35,7 +35,7 @@ pub fn chg_pri(id: i32, pri: i32, opt: i32) -> Result<W, ERR> {
     }
 }
 
-pub fn ext_prc(code: W) {
+pub fn ext_prc(code: W) -> ! {
     unsafe { b_ext_prc(code) }
 }
 
