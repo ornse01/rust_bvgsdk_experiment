@@ -13,7 +13,6 @@ use alloc::string::ToString;
 use btron::allocator::Allocator;
 use btron::print::*;
 use btron::rustify::*;
-use btron::types::*;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -36,18 +35,6 @@ fn panic(info: &PanicInfo) -> ! {
     }
     ext_prc(0)
 }
-
-const TK_A: TC = 0x2341;
-const TK_B: TC = TK_A + 1;
-const TK_T: TC = TK_A + 19;
-const TK_R: TC = TK_A + 17;
-const TK_O: TC = TK_A + 14;
-const TK_N: TC = TK_A + 13;
-
-const TK_a: TC = 0x2361;
-const TK_e: TC = TK_a + 4;
-const TK_s: TC = TK_a + 18;
-const TK_t: TC = TK_a + 19;
 
 #[global_allocator]
 static ALLOCATOR: Allocator = Allocator {};
