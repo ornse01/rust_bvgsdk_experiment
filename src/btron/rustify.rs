@@ -83,7 +83,7 @@ pub fn gset_ptr(
     style: Option<StdPointerShape>,
     img: Option<&PTRIMG>,
     fgcol: Option<COLOR>,
-    bgcol:  Option<COLOR>,
+    bgcol: Option<COLOR>,
 ) -> Result<W, ERR> {
     let err: ERR;
 
