@@ -87,22 +87,10 @@ pub fn gset_ptr(
 ) -> Result<W, ERR> {
     let err: ERR;
 
-    let style_val = match style {
-        Some(v) => v as PTRSTL,
-        None => -1,
-    };
-    let img_val = match img {
-        Some(v) => v as *const PTRIMG,
-        None => core::ptr::null(),
-    };
-    let fgcol_val = match fgcol {
-        Some(v) => v,
-        None => 0x80000000,
-    };
-    let bgcol_val = match bgcol {
-        Some(v) => v,
-        None => 0x80000000,
-    };
+    let style_val = style.map_or(-1, |v| v as PTRSTL);
+    let img_val = img.map_or(core::ptr::null(), |v| v  as *const PTRIMG);
+    let fgcol_val =  fgcol.unwrap_or(0x80000000);
+    let bgcol_val = bgcol.unwrap_or(0x80000000);
 
     unsafe { err = b_gset_ptr(style_val, img_val, fgcol_val, bgcol_val) }
     if err >= 0 {
@@ -114,10 +102,7 @@ pub fn gset_ptr(
 
 pub fn dopn_dat(lnk: Option<&LINK>) -> Result<W, ERR> {
     let ret;
-    let lnk_val = match lnk {
-        Some(v) => v as *const LINK,
-        None => core::ptr::null(),
-    };
+    let lnk_val = lnk.map_or(core::ptr::null(), |v|  v as *const LINK);
     unsafe { ret = b_dopn_dat(lnk_val) }
     if ret >= 0 {
         Ok(ret)
@@ -138,19 +123,10 @@ pub fn wopn_wnd(
 ) -> Result<WID, W> {
     let err;
     let r_val = r as *mut RECT;
-    let org_val = match org {
-        Some(v) => v as *const RECT,
-        None => core::ptr::null(),
-    };
+    let org_val = org.map_or(core::ptr::null(), |v|v as *const RECT);
     let tit_val = tit.as_ptr();
-    let bgpat_val = match bgpat {
-        Some(v) => v as *const PAT,
-        None => core::ptr::null(),
-    };
-    let atr_val = match atr {
-        Some(v) => v as *const WDDISP,
-        None => core::ptr::null(),
-    };
+    let bgpat_val = bgpat.map_or(core::ptr::null(), |v|v as *const PAT);
+    let atr_val = atr.map_or(core::ptr::null(), |v|v as *const WDDISP);
 
     unsafe { err = b_wopn_wnd(attr, par, r_val, org_val, pict, tit_val, bgpat_val, atr_val) }
     if err >= 0 {
@@ -177,10 +153,7 @@ pub fn wcls_wnd(wid: WID, opt: WClsWndOpt) -> Result<W, ERR> {
 
 pub fn wreq_dsp(wid: Option<WID>) -> Result<W, ERR> {
     let ret;
-    let wid_val = match wid {
-        Some(v) => v,
-        None => 0,
-    };
+    let wid_val = wid.unwrap_or(0);
     unsafe { ret = b_wreq_dsp(wid_val) }
     if ret >= 0 {
         Ok(ret)
@@ -191,10 +164,7 @@ pub fn wreq_dsp(wid: Option<WID>) -> Result<W, ERR> {
 
 pub fn wsta_dsp(wid: WID, r: Option<*mut RECT>, _: Option<&RLIST>) -> Result<W, ERR> {
     let ret;
-    let r_val = match r {
-        Some(v) => v,
-        None => core::ptr::null_mut(),
-    };
+    let r_val = r.unwrap_or(core::ptr::null_mut());
     unsafe { ret = b_wsta_dsp(wid, r_val, core::ptr::null_mut()) } // TODO: rlist
     if ret >= 0 {
         Ok(ret)
@@ -217,10 +187,7 @@ pub fn wend_dsp(wid: WID) -> Result<bool, ERR> {
 
 pub fn wera_wnd(wid: WID, r: Option<&RECT>) -> Result<W, ERR> {
     let ret;
-    let r_val = match r {
-        Some(v) => v,
-        None => core::ptr::null(),
-    };
+    let r_val = r.map_or(core::ptr::null(), |v| v as *const RECT);
     unsafe { ret = b_wera_wnd(wid, r_val) }
     if ret >= 0 {
         Ok(ret)
@@ -231,10 +198,7 @@ pub fn wera_wnd(wid: WID, r: Option<&RECT>) -> Result<W, ERR> {
 
 pub fn wmov_drg(evt: &WEVENT, newr: Option<*mut RECT>) -> Result<bool, ERR> {
     let ret;
-    let newr_val = match newr {
-        Some(v) => v,
-        None => core::ptr::null_mut(),
-    };
+    let newr_val = newr.unwrap_or(core::ptr::null_mut());
     unsafe { ret = b_wmov_drg(evt, newr_val) }
     if ret == 1 {
         Ok(true)
