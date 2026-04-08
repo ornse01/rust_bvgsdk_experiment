@@ -1,6 +1,5 @@
 #![no_std]
 #![no_main]
-#![feature(panic_info_message)]
 
 use core::panic::PanicInfo;
 
@@ -26,7 +25,7 @@ static ALLOCATOR: Allocator = Allocator {};
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    match info.message() {
+    match info.message().as_str() {
         Some(v) => {
             println!("{}", &v.to_string());
         }

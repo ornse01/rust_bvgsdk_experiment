@@ -1,7 +1,6 @@
 #![no_std]
 #![no_main]
 #![feature(c_size_t)]
-#![feature(panic_info_message)]
 
 extern crate alloc;
 extern crate rust_bvgsdk_experiment;
@@ -20,7 +19,7 @@ static ALLOCATOR: Allocator = Allocator {};
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    match info.message() {
+    match info.message().as_str() {
         Some(v) => {
             println!("{}", &v.to_string());
         }
